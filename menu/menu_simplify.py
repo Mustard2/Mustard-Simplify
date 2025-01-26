@@ -184,6 +184,35 @@ class MUSTARDSIMPLIFY_PT_Simplify(MainPanel, bpy.types.Panel):
                     row2.alert = settings.execution_times_overhead > 0.1
                     row2.label(text=str(int(settings.execution_times_overhead * 1000)) + " ms")
 
+        if addon_prefs.experimental:
+            box = layout.box()
+            row = box.row()
+            row.prop(settings, 'collapse_object_visibility', text="",
+                     icon="RIGHTARROW" if settings.collapse_object_visibility else "DOWNARROW_HLT", emboss=False)
+            row.label(text="Object Visibility")
+            if addon_prefs.wiki:
+                row.operator("mustard_simplify.openlink", text="",
+                             icon="QUESTION").url = "https://github.com/Mustard2/MustardSimplify/wiki#execution-times"
+            if not settings.collapse_object_visibility:
+                row = box.row()
+                col = row.column()
+                row2 = col.row(align=True)
+                row2.prop(settings, "object_visibility")
+                if settings.object_visibility:
+                    row2 = col.row(align=True)
+                    row2.prop(settings, "object_visibility_animation_update", icon="ANIM")
+                    row2.operator("mustard_simplify.update_object_visibility", icon="UV_SYNC_SELECT", text="")
+                    if settings.object_visibility_animation_update:
+                        col.prop(settings, "object_visibility_frames_rate")
+
+                    if addon_prefs.debug:
+                        box2 = box.box()
+                        row2 = box2.row()
+                        row2.label(text="Object Visibility Overhead", icon="TIME")
+                        row2.scale_x = 0.3
+                        row2.alert = settings.object_visibility_overhead > 0.1
+                        row2.label(text=str(int(settings.object_visibility_overhead * 1000)) + " ms")
+
         if addon_prefs.advanced:
             box = layout.box()
             row = box.row()

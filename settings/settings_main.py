@@ -51,7 +51,9 @@ class MustardSimplify_Settings(bpy.types.PropertyGroup):
     collapse_exceptions: BoolProperty(name="Collapse",
                                       default=True)
     collapse_times: BoolProperty(name="Collapse",
-                                  default=True)
+                                 default=True)
+    collapse_object_visibility: BoolProperty(name="Collapse",
+                                 default=True)
     collapse_others: BoolProperty(name="Collapse",
                                   default=True)
 
@@ -100,14 +102,37 @@ class MustardSimplify_Settings(bpy.types.PropertyGroup):
                                              default=30,
                                              min=0)
     execution_time_order: EnumProperty(name="Execution Time list order",
-                                 default="NAME",
-                                 items=(
-                                     ("NAME", "Name", "Order by name", "SORTALPHA", 0),
-                                     ("TIME", "Time", "Order by time", "TIME", 1))
+                                       default="NAME",
+                                       items=(
+                                           ("NAME", "Name", "Order by name", "SORTALPHA", 0),
+                                           ("TIME", "Time", "Order by time", "TIME", 1))
                                        )
     # Internal
     execution_times_frames: IntProperty(default=0)
     execution_times_overhead: FloatProperty(default=0.)
+
+    # Object Visibility
+    def object_visibility_update(self, context):
+        for obj in context.scene.objects:
+            if obj:
+                if obj.MustardSimplify_ObjectVisibility:
+                    obj.hide_viewport = False
+                    obj.MustardSimplify_ObjectVisibility = False
+
+    object_visibility: BoolProperty(name="Enable Object Visibility",
+                                    description="",
+                                    update=object_visibility_update,
+                                    default=False)
+    object_visibility_animation_update: BoolProperty(name="Enable Object Visibility on Animations",
+                                                     description="Automatically update the Object Visibility during animations",
+                                                     default=False)
+    object_visibility_frames_rate: IntProperty(name="Update Frame-rate",
+                                             description="Frames between Object Visibility computation updates.\nA small number can affect Viewport performance.\nSet to 0 to update at every frame",
+                                             default=30,
+                                             min=0)
+    # Internal
+    object_visibility_frames: IntProperty(default=0)
+    object_visibility_overhead: FloatProperty(default=0.)
 
 
 def register():

@@ -15,10 +15,16 @@ class MustardSimplify_AddonPrefs(bpy.types.AddonPreferences):
                        description="Show the Help buttons near the tools",
                        default=True)
 
-    # Maintenance tools
+    # Advanced options
     advanced: BoolProperty(name="Advanced Options",
-                           description="Unlock advanced options",
+                           description="Unlock Advanced Options",
                            default=False)
+
+    # Experimental tools
+    experimental: BoolProperty(default=False,
+                               name="Experimental Tools",
+                               description="Unlock Experimental Tools.\nSome tools might not work property or might "
+                                           "impact viewport performance: use at your own risk")
 
     # Debug mode
     debug: BoolProperty(default=False,
@@ -33,6 +39,7 @@ class MustardSimplify_AddonPrefs(bpy.types.AddonPreferences):
         col = layout.column(align=True)
         col.prop(self, "wiki")
         col.prop(self, "advanced")
+        col.prop(self, "experimental")
         col.prop(self, "debug")
 
         col = layout.column(align=True)
@@ -40,7 +47,7 @@ class MustardSimplify_AddonPrefs(bpy.types.AddonPreferences):
 
         col = layout.column(align=True)
         col.operator("mustard_simplify.openlink", text="Report Issue",
-                        icon="URL").url = "https://github.com/Mustard2/MustardSimplify/issues"
+                     icon="URL").url = "https://github.com/Mustard2/MustardSimplify/issues"
 
 
 def register():
